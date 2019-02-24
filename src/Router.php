@@ -10,6 +10,59 @@ class Router
      */
     private $params = [];
 
+    // TODO: to implement
+    public function createTreeFromRouteDefinition($routeDefinition)
+    {
+        /**
+         * NOTE: 必要なデータ：パス、パスパラメータ、HTTPメソッド、アクション
+         * GET    /                      IndexController@getIndex
+         * GET    /posts                 PostController@getPosts
+         * GET    /posts/:title          PostController@getPostByPostTitle
+         * POST   /posts/:title          PostController@getPostByPostTitle
+         * GET    /posts/:title/:token   PostController@getPostByToken
+         * GET    /posts/:category_name  PostController@getPostsByCategoryName
+         */
+
+        $routeDefinition = [];
+        exit();
+        // TODO radix treeを構築する
+        // 探索のアルゴリズムは自作でやってしまう
+
+        for ($i = 0; $i < count($routeDefinition); $i++) {
+            // NOTE: /についてはGETとPOSTだけ。/:titleとかは想定しない。仕様としてカバーしない方向で進める
+
+            // TODO: /だったら1階層目に配列を追加
+            if ($routeDefinition[$i][0] == '/') {
+                $this->tree['/'] = [
+                    'END_POINT' => [
+                        $routeDefinition[$i][1] => $routeDefinition[$i][2],
+                    ],
+                ];
+            } else {
+                $tmpAry = $this->createArrayFromCurrentPath($routeDefinition[$i][0]);
+
+                // TODO treeに追加したい配列の構造をつくる
+                // ex.
+                // /post/:title
+                // ['post' => [
+                //     ':title' => [
+                //         'END_POINT' => [
+                //             'GET' =>'PostController@getPostByToken',
+                //         ],
+                //     ],
+                // ]];
+
+                // TODO 配列の階層を降りていく再起処理
+                for ($j=0; $i < count($tmpAry); $i++) {
+                }
+            }
+
+            // TODO: /が見つからなければエラーを返す
+            // 具体的なエラーハンドリングは最後に設計
+        }
+        // debug($this->tree);
+    }
+
     /**
      * Create array for search path from current path
      *
@@ -22,7 +75,7 @@ class Router
 
         $arrayFromCurrentPath = [];
 
-        for ($i=0; $i < $currentPathLength; $i++) {
+        for ($i = 0; $i < $currentPathLength; $i++) {
             if ($currentPathLength == 1) {
                 // ルートの時
                 if ($currentPath{$i} == '/') {
@@ -99,7 +152,7 @@ class Router
      */
     private function createParams($targetParams, $targetArrayDimension, $targetPath)
     {
-        for ($i=0; $i < count($targetParams); $i++) {
+        for ($i = 0; $i < count($targetParams); $i++) {
             if (isset($targetArrayDimension[$targetParams[$i]])) {
                 $this->params[$targetParams[$i]] = $targetPath;
 

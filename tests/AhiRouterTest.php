@@ -18,8 +18,10 @@ class AhiRouterTest extends TestCase
      * GET    /posts/:title/:token   PostController@getPostByToken
      * GET    /posts/:category_name  PostController@getPostsByCategoryName
      */
-    private $routes = [
+    // TODO: あとで名前は最適化する
+    private $routeMap = [
         '/' => [
+            // NOTE: END_POINTという表現は微妙な気がする。ルーティング内部の処理で使うデータ構造なので良しとしたい。アルゴリズムの最適化をするとこの辺は変わるはず。
             'END_POINT' => [
                 'GET' => 'IndexController@getIndex',
             ],
@@ -47,6 +49,22 @@ class AhiRouterTest extends TestCase
         ],
     ];
 
+    // TODO: to implement
+    private $routeDefinition = [
+        ['/', 'GET', 'IndexControlle@getIndex'],
+        ['/posts', 'GET', 'PostController@getPosts'],
+        ['/posts/:title', 'GET', 'PostController@getPostByPostTitle'],
+        ['/posts/:title', 'Post', 'PostController@postPostByPostTitle'],
+    ];
+
+    // TODO: to implement
+    public function testCreateTreeFromRouteDefinition()
+    {
+        $router = new Router();
+
+        $router->createTreeFromRouteDefinition($this->routeDefinition);
+    }
+
     /**
     * @test
     * @dataProvider createPathArrayProvider
@@ -70,7 +88,7 @@ class AhiRouterTest extends TestCase
 
         $arrayFromCurrentPath = $router->createArrayFromCurrentPath($currentPath);
 
-        $result = $router->search($this->routes, $arrayFromCurrentPath, $requestMethod, $targetParams);
+        $result = $router->search($this->routeMap, $arrayFromCurrentPath, $requestMethod, $targetParams);
 
         $this->assertSame($expectedAction, $result['action']);
         $this->assertEquals($expectedParams, $result['params']);

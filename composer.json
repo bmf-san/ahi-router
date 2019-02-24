@@ -9,7 +9,7 @@
   }],
   "minimum-stability": "stable",
   "scripts": {
-    "phpunit": [
+    "test": [
       "./vendor/bin/phpunit --colors=always"
     ],
     "ci": [
