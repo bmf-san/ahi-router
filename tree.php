@@ -85,6 +85,7 @@ class Tree
 
 $tree = new Tree();
 $nodeList = $tree->createNodeList('/posts/:id', 'GET', 'PostController@show');
+$nodeList = $tree->createNodeList('/posts/:name', 'GET', 'PostController@show');
 // $nodeList = $tree->createNodeList('/', 'GET', 'IndexController@show');
 $tree->add($nodeList);
 
